@@ -13,3 +13,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Models
+// User table
+model User {
+  userID    String  @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  email String  @unique
+  password String
+  // A user can boorw zero/many books
+  borrow Borrow[]
+  // A user can receive zero/many notifications
+  notif Notification[]
+}
+// Books table
+model Book{
+  bookID    String  @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  author String
+  description String
+  publicationYear DateTime
+  ISBN String
+  // A book can be borrow mzero/any times
+  borrow Borrow[]
+  // A book can receive zero/many notifications
+  notif Notification[] 
+}
+// borrow table
+model Borrow{
+  BorrowID    String  @id @default(auto()) @map("_id") @db.ObjectId
+  borrowDate DateTime
+  returnDate DateTime
+  // A borrow is concerned to only one user
+  userBorrowID String  @db.ObjectId
+  userBrorrow User @relation(fields: [userBorrowID], references: [userID])
+  // A borrow is concerned to only one book
+  borrowBookID String  @db.ObjectId
+  borrowBook Book @relation(fields: [borrowBookID], references: [bookID])
+}
+// notifications table
+model Notification{
+  notificationID    String  @id @default(auto()) @map("_id") @db.ObjectId
+  message String
+  // A notification concerns only one user
+  userNotifID String @db.ObjectId
+  userNotif User @relation(fields: [userNotifID],references: [userID])
+  // A notification concerns only one book
+  notifBookID String @db.ObjectId
+  notifBook Book @relation(fields: [notifBookID],references: [bookID])
+}
