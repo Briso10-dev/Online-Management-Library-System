@@ -7,7 +7,7 @@ export const userRoute = Router()
 // get user profile
 userRoute.get("/profile/:id",userControlleurs.getusers)
 // user inscription
-userRoute.post("/signup",)
+userRoute.post("/signup",userControlleurs.createuser)
 // user connexion
 userRoute.post("/login")
 // user deconnexion
