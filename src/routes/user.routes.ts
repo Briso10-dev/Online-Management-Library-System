@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { userControlleurs } from "../controllers/user.controllers";
+import { loginValidator } from "../middleware/validator.middleware";
 
 export const userRoute = Router()
 
@@ -7,7 +8,7 @@ export const userRoute = Router()
 // get user profile
 userRoute.get("/profile/:id",userControlleurs.getusers)
 // user inscription
-userRoute.post("/signup",userControlleurs.createuser)
+userRoute.post("/signup",loginValidator, userControlleurs.createuser)
 // user connexion
 userRoute.post("/login")
 // user deconnexion

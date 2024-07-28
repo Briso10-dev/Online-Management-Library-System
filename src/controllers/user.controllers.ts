@@ -3,6 +3,7 @@ import { HttpCode } from "../core/constants";
 import { PrismaClient } from "@prisma/client";
 import sendError from "../core/constants/errors";
 import bcrypt from 'bcrypt'
+import { validationResult } from "express-validator";
 
 const prisma = new PrismaClient() //orm creation
 
@@ -26,11 +27,16 @@ export const userControlleurs = {
         }
     },
     createuser : async (req:Request,res:Response)=>{
-        const {name,email,password} = req.body
-
+         // Check for validation errors
+         const errors = validationResult(req);
+         if (!errors.isEmpty()) 
+             return res.status(HttpCode.UNPROCESSABLE_ENTITY).json({ errors: errors.array() });
+ 
         try {
+            const {name,email,password} = req.body
+
             const passHash = await bcrypt.hash(password,10)
-               const user = prisma.user.create({
+               const user = await prisma.user.create({
                 data : {
                     name,
                     email,
@@ -38,9 +44,9 @@ export const userControlleurs = {
                 }
                })
                if(user)
-                    res.json(user).status(HttpCode.OK)
+                    res.status(HttpCode.CREATED).json(user)
                else
-                    res.json({msg:"User could not be created"})            
+                    res.status(HttpCode.BAD_REQUEST).json({msg:"User could not be created !"})            
         } catch (error) {
             sendError(res,error)
         }

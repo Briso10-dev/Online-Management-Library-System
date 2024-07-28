@@ -21,6 +21,6 @@ app.use(
 );
 
 app.use(morgan('combined'));
-app.use("/users",userRoute)
+app.use('/users',userRoute)
 setupSwagger(app);
 export default app;
