@@ -6,11 +6,11 @@ export const userRoute = Router()
 
 // User definition of routes
 // get user profile
-userRoute.get("/profile/:id",userControlleurs.getusers)
+userRoute.get("/profile/:id",userControlleurs.getUser)
 // user inscription
-userRoute.post("/signup",loginValidator, userControlleurs.createuser)
+userRoute.post("/signup",loginValidator, userControlleurs.createUser)
 // user connexion
-userRoute.post("/login")
+userRoute.post("/login",userControlleurs.loginUser)
 // user deconnexion
 userRoute.post("/logout")
 // update user profile

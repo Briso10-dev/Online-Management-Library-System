@@ -1,1 +1,3 @@
 node_modules/
+src/core/config/env.ts
+./.env

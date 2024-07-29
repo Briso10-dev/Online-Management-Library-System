@@ -1,15 +1,17 @@
 import { Request,Response } from "express";
 import { HttpCode } from "../core/constants";
 import { PrismaClient } from "@prisma/client";
+import chalk from 'chalk'
 import sendError from "../core/constants/errors";
 import bcrypt from 'bcrypt'
 import { validationResult } from "express-validator";
+import tokenOps from "../core/config/jwt.functions";
 
 const prisma = new PrismaClient() //orm creation
 
 export const userControlleurs = {
     // get user profile
-    getusers : async (req:Request, res:Response) =>{
+    getUser : async (req:Request, res:Response) =>{
         const {id} = req.params
         
         try {
@@ -26,7 +28,7 @@ export const userControlleurs = {
             sendError(res,error)
         }
     },
-    createuser : async (req:Request,res:Response)=>{
+    createUser : async (req:Request,res:Response)=>{
          // Check for validation errors
          const errors = validationResult(req);
          if (!errors.isEmpty()) 
@@ -47,6 +49,31 @@ export const userControlleurs = {
                     res.status(HttpCode.CREATED).json(user)
                else
                     res.status(HttpCode.BAD_REQUEST).json({msg:"User could not be created !"})            
+        } catch (error) {
+            sendError(res,error)
+        }
+    },
+    loginUser : async (req:Request,res:Response)=>{
+        try {
+            const {email,password} = req.body
+
+            const user = await prisma.user.findFirst({
+                where:{
+                    email
+                },
+            })
+            if(user){
+                const testPass = await bcrypt.compare(password,user.password)
+                if(testPass){
+                    // jwt token generation
+                    const accessToken = tokenOps.generateAccessToken(user)
+                    const refreshToken= tokenOps.generateRefreshToken(user)
+                    user.password = " "
+                    res.cookie(" User successfully connected",refreshToken,{httpOnly: true, secure: true}) //refresh token stored in cookie
+                    res.json({ msg: "User successfully logged in" }).status(HttpCode.OK)
+                }else res.json({msg:"Invalid infos enterd"})
+            }else console.log(chalk.red("No user found"))
+
         } catch (error) {
             sendError(res,error)
         }
