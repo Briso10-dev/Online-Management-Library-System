@@ -12,4 +12,4 @@ bookRoute.post("/",bookValidator,bookControllers.createBook)
 // update user profile
 bookRoute.put("/:id",bookControllers.updateBook)
 // delete an acount user
-bookRoute.delete("/",)
+bookRoute.delete("/:id",bookControllers.deleteBook)

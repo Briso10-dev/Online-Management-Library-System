@@ -66,5 +66,22 @@ export const bookControllers = {
             sendError(res, error)
         }
     },
+     // deletion of a user's profile
+     deleteBook: async (req: Request, res: Response) => {
+        try {
+            const { id } = req.params
+
+            const deleteBook = await prisma.book.delete({
+                where: {
+                    bookID: id
+                },
+            })
+            if (deleteBook)
+                res.json({ msg: "book successfully deleted" })
+            else res.send({ msg: "could not delete book" })
+        } catch (error) {
+            sendError(res, error)
+        }
+    },
 }
 
