@@ -9,7 +9,7 @@ import tokenOps from "../core/config/jwt.functions";
 
 const prisma = new PrismaClient() //orm creation
 
-export const userControlleurs = {
+export const userControllers = {
     // get user profile
     getUser: async (req: Request, res: Response) => {
         const { id } = req.params

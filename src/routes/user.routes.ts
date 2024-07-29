@@ -1,19 +1,19 @@
 import { Router } from "express";
-import { userControlleurs } from "../controllers/user.controllers";
+import { userControllers } from "../controllers/user.controllers";
 import { loginValidator } from "../middleware/validator.middleware";
 
 export const userRoute = Router()
 
 // User definition of routes
 // get user profile
-userRoute.get("/profile/:id",userControlleurs.getUser)
+userRoute.get("/profile/:id",userControllers.getUser)
 // user inscription
-userRoute.post("/signup",loginValidator, userControlleurs.createUser)
+userRoute.post("/signup",loginValidator, userControllers.createUser)
 // user connexion
-userRoute.post("/login",userControlleurs.loginUser)
+userRoute.post("/login",userControllers.loginUser)
 // user deconnexion
 userRoute.post("/logout")
 // update user profile
-userRoute.put("/profile/:id",loginValidator,userControlleurs.updateUser)
+userRoute.put("/profile/:id",loginValidator,userControllers.updateUser)
 // delete an acount user
-userRoute.delete("/profile/:id",userControlleurs.deleteUser)
+userRoute.delete("/profile/:id",userControllers.deleteUser)
