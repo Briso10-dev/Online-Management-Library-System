@@ -30,7 +30,7 @@ model Book{
   bookID    String  @id @default(auto()) @map("_id") @db.ObjectId
   title String
   author String
-  description String
+  description String?
   publicationYear DateTime
   ISBN String
   // A book can be borrow mzero/any times

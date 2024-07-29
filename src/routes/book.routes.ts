@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { bookControllers } from "../controllers/book.controllers";
-import { loginValidator } from "../middleware/validator.middleware";
+import { bookValidator } from "../middleware/validator.middleware";
 
 export const bookRoute = Router()
 
@@ -8,7 +8,7 @@ export const bookRoute = Router()
 // get user profile
 bookRoute.get("/",bookControllers.getBook)
 // user inscription
-bookRoute.post("/",)
+bookRoute.post("/",bookValidator,bookControllers.createBook)
 // user connexion
 bookRoute.post("/",)
 // user deconnexion
