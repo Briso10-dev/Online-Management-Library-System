@@ -108,6 +108,23 @@ export const userControlleurs = {
         } catch (error) {
             sendError(res, error)
         }
-    }
+    },
+    // deletion of a user's profile
+    deleteUser: async (req: Request, res: Response) => {
+        try {
+            const { id } = req.params
+
+            const deleteUser = await prisma.user.delete({
+                where: {
+                    userID: id
+                },
+            })
+            if (deleteUser)
+                res.json({ msg: "user successfully deleted" })
+            else res.send({ msg: "could not delete user" })
+        } catch (error) {
+            sendError(res, error)
+        }
+    },
 }
 

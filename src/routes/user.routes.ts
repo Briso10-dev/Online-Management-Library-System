@@ -14,6 +14,6 @@ userRoute.post("/login",userControlleurs.loginUser)
 // user deconnexion
 userRoute.post("/logout")
 // update user profile
-userRoute.put("/profile/:id",userControlleurs.updateUser)
+userRoute.put("/profile/:id",loginValidator,userControlleurs.updateUser)
 // delete an acount user
-userRoute.delete("/profile")
+userRoute.delete("/profile/:id",userControlleurs.deleteUser)
