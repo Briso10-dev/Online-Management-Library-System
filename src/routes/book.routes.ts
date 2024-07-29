@@ -9,11 +9,7 @@ export const bookRoute = Router()
 bookRoute.get("/",bookControllers.getBook)
 // user inscription
 bookRoute.post("/",bookValidator,bookControllers.createBook)
-// user connexion
-bookRoute.post("/",)
-// user deconnexion
-bookRoute.post("/",)
 // update user profile
-bookRoute.put("/",)
+bookRoute.put("/:id",bookControllers.updateBook)
 // delete an acount user
 bookRoute.delete("/",)
