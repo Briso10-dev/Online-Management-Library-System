@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import { ONE_HUNDRED, SIXTY } from './core/constants';
 import { userRoute } from './routes/user.routes';
 import { bookRoute } from './routes/book.routes';
+import { borrowRoute } from './routes/borrow.routes';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(morgan('combined'));
 app.use(cookieParser())
 app.use('/users',userRoute)
 app.use('/books',bookRoute)
+app.use('/loans',borrowRoute)
 
 setupSwagger(app);
 export default app;

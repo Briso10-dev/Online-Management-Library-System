@@ -31,8 +31,9 @@ model Book{
   title String
   author String
   description String?
-  publicationYear DateTime
-  ISBN String
+  publicationYear Int
+  ISBN String?
+  state Boolean? @default(true)
   // A book can be borrow mzero/any times
   borrow Borrow[]
   // A book can receive zero/many notifications

@@ -16,3 +16,9 @@ export const bookValidator = [
   body('publicationYear', 'Year of publication does not Empty').not().isEmpty(),
   body('ISBN','Inavalid does not Empty').not().isEmpty(),
 ]
+export const borrowValidator = [
+  body('bookID', 'Invalid does not Empty').not().isEmpty(),
+  body('userID','Inavalid does not Empty').not().isEmpty(),
+  body('bookID', 'The  bookID length must be 24 characters').isLength({min: 24}),
+  body('userID', 'The USERID length must be 24 characters').isLength({min: 24})
+]
