@@ -97,5 +97,22 @@ export const borrowControllers = {
         } catch (error) {
             sendError(res,error)
         }
+    },
+    getBorrowedBooks : async (req:Request,res:Response)=>{
+        try {
+            const {userID} = req.params
+
+            const userBorrowed = await prisma.borrow.findMany({
+                where:{
+                    userBorrowID : userID
+                }
+            })
+               if(!userBorrowed)
+                 return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({msg:"wrong userID or userID not found"})
+                return res.status(HttpCode.OK).json(userBorrowed)
+
+        } catch (error) {
+            sendError(res,error)
+        }
     }
 }

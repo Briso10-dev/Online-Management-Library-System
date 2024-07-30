@@ -7,3 +7,4 @@ export const borrowRoute = Router()
 // borrow routes
 borrowRoute.post("/",borrowValidator, borrowControllers.createBorrow)
 borrowRoute.put("/:borrowID/return",borrowControllers.returnBook)
+borrowRoute.get("/user/:userID",borrowControllers.getBorrowedBooks)
