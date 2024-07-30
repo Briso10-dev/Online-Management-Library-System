@@ -41,7 +41,7 @@ model Book{
 }
 // borrow table
 model Borrow{
-  BorrowID    String  @id @default(auto()) @map("_id") @db.ObjectId
+  borrowID    String  @id @default(auto()) @map("_id") @db.ObjectId
   borrowDate DateTime
   returnDate DateTime
   // A borrow is concerned to only one user

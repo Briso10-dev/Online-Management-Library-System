@@ -19,8 +19,12 @@ export const borrowControllers = {
             const { bookID, userID } = req.body
             //finding the borrowed book and user borrowing
             const [book, user] = await Promise.all([
-                prisma.book.findUnique({ where: { bookID } }),
-                prisma.user.findUnique({ where: { userID } })
+                prisma.book.findUnique({ 
+                    where: { bookID } 
+                }),
+                prisma.user.findUnique({ 
+                    where: { userID } 
+                })
             ]);
             //checking if actual user and book is found
             if (!book || !user) {
@@ -41,8 +45,12 @@ export const borrowControllers = {
             });
             // Update book state to borrowed
             await prisma.book.update({
-                where: { bookID },
-                data: { state: false }
+                where: { 
+                    bookID 
+                },
+                data: { 
+                    state: false 
+                }
             });
             return res.status(HttpCode.CREATED).json(borrow)
 
@@ -50,5 +58,44 @@ export const borrowControllers = {
             sendError(res, error)
         }
 
+    },
+    returnBook : async (req:Request,res:Response)=>{
+        try {
+            const {borrowID} = req.params
+            const {bookID} = req.body
+
+            const [borrow, book] = await Promise.all([
+                prisma.borrow.findUnique({ 
+                    where: { 
+                        borrowID 
+                    } 
+                }),
+                prisma.book.findUnique({ 
+                    where: { 
+                        bookID 
+                    } 
+                })
+            ]);
+             // Update book state to available if borrow's identifiant actually exists
+             if(!borrow || !book)
+                return res.status(HttpCode.NOT_FOUND).json({msg:"You actually did not borrow a book here"})
+            if(book.state==false && borrow.borrowDate > borrow.returnDate)
+                return res.status(HttpCode.FORBIDDEN).json({msg:"You will pay extra"})
+             const updateBook = await prisma.book.update({
+                where: { 
+                    bookID 
+                },
+                data: { 
+                    state: true 
+                }
+            });
+            if(!updateBook)
+                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({msg:"unable to update book's status"})
+            
+            return res.status(HttpCode.OK).json({msg:"Book successfully returned"})
+            
+        } catch (error) {
+            sendError(res,error)
+        }
     }
 }
