@@ -5,6 +5,6 @@ import { borrowValidator } from "../middleware/validator.middleware";
 export const borrowRoute = Router()
 
 // borrow routes
-borrowRoute.post("/",borrowValidator, borrowControllers.createBorrow)
+borrowRoute.post("/:userID",borrowValidator, borrowControllers.createBorrow)
 borrowRoute.put("/:borrowID/return",borrowControllers.returnBook)
 borrowRoute.get("/user/:userID",borrowControllers.getBorrowedBooks)

@@ -14,26 +14,26 @@ export const borrowControllers = {
                 return res.status(HttpCode.UNPROCESSABLE_ENTITY).json({ errors: errors.array() });
 
             const borrowDate = new Date(Date.now())
-            const returnDate = new Date(borrowDate.getTime() + 10 * 60 * 1000)
-
-            const { bookID, userID } = req.body
+            const returnDate = new Date(borrowDate.getTime() + 2 * 60 * 1000)
+            const {userID} = req.params
+            const { bookID } = req.body
             //finding the borrowed book and user borrowing
             const [book, user] = await Promise.all([
-                prisma.book.findUnique({ 
-                    where: { bookID } 
+                prisma.borrow.findUnique({ 
+                    where: { 
+                        borrowID : bookID  //if a book is in borrow means therefore it it exists in table book 
+                    } 
                 }),
                 prisma.user.findUnique({ 
-                    where: { userID } 
+                    where: {
+                        userID 
+                    } 
                 })
             ]);
-            //checking if actual user and book is found
-            if (!book || !user) {
-                return res.status(HttpCode.NOT_FOUND).json({ message: "Infos provided not found" });
-            }
-            //checking first the status of the book borrowed
-            if (book.state === false) {
-                return res.status(HttpCode.BAD_REQUEST).json({ message: "Book is already borrowed" });
-            }
+            //checking if actual user and book is found in table borrowed
+            if (!book || !user) 
+                return res.status(HttpCode.NOT_FOUND).json({ message: "book already borrowed or you are not a correct user" });
+            
             //creation of borrow
             const borrow = await prisma.borrow.create({
                 data: {
@@ -43,18 +43,11 @@ export const borrowControllers = {
                     userBorrowID: userID
                 }
             });
-            // Update book state to borrowed
-            await prisma.book.update({
-                where: { 
-                    bookID 
-                },
-                data: { 
-                    state: false 
-                }
-            });
+            if(!borrow)
+                return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({msg:"could not borrow"})
             return res.status(HttpCode.CREATED).json(borrow)
 
-        } catch (error) {
+        }catch (error) {
             sendError(res, error)
         }
 
