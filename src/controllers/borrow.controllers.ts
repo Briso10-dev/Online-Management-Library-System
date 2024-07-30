@@ -113,5 +113,5 @@ export const borrowControllers = {
         } catch (error) {
             sendError(res, error)
         }
-    }
+    },
 }

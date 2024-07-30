@@ -10,6 +10,7 @@ import { userRoute } from './routes/user.routes';
 import { bookRoute } from './routes/book.routes';
 import { borrowRoute } from './routes/borrow.routes';
 import { routeReserved } from './routes/reservation.routes';
+import { routeNotif } from './routes/notification.routes';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -29,6 +30,7 @@ app.use('/users',userRoute)
 app.use('/books',bookRoute)
 app.use('/loans',borrowRoute)
 app.use('/reservations',routeReserved)
+app.use('/notification',routeNotif)
 
 setupSwagger(app);
 export default app;

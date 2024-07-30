@@ -2,7 +2,7 @@ import { envs } from "./env";
 import nodemailer from 'nodemailer'
 
 
-const sendMail = (email: string, subject: string, text: string) => {
+const sendMail = (email: string,subject: string, text: string) => {
     // configuring nodemailer
 
     const transporter = nodemailer.createTransport({
