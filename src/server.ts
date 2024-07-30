@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import { ONE_HUNDRED, SIXTY } from './core/constants';
 import { userRoute } from './routes/user.routes';
 import { bookRoute } from './routes/book.routes';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 app.use(express.json());
@@ -20,8 +21,8 @@ app.use(
 		message: 'Trop de Requete à partir de cette adresse IP '
 	})
 );
-
 app.use(morgan('combined'));
+app.use(cookieParser())
 app.use('/users',userRoute)
 app.use('/books',bookRoute)
 

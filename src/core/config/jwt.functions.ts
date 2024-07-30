@@ -16,5 +16,8 @@ const tokenOps = {
     generateRefreshToken: (payload): string => {
         return jwt.sign(payload, envs.JWT_ACCESS_TOKEN as string, {expiresIn: '30d' });
     },
+    verifyAccessToken: (token: string) => {
+        return jwt.verify(token, envs.JWT_ACCESS_TOKEN as string)
+    },
 }
 export default tokenOps;

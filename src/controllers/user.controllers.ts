@@ -53,8 +53,9 @@ export const userControllers = {
             sendError(res, error)
         }
     },
-    loginUser: async (req: Request, res: Response) => {
+    loginUser: async (req:Request, res: Response) => {
         try {
+        
             const { email, password } = req.body
 
             const user = await prisma.user.findFirst({
@@ -69,7 +70,12 @@ export const userControllers = {
                     const accessToken = tokenOps.generateAccessToken(user)
                     const refreshToken = tokenOps.generateRefreshToken(user)
                     user.password = " "
-                    res.cookie(" User successfully connected", refreshToken, { httpOnly: true, secure: true }) //refresh token stored in cookie
+                    res.cookie(`${user.name}-cookie`, refreshToken, { 
+                    httpOnly: true, 
+                    secure: true,
+                    maxAge : 30 * 24 * 60 * 1000
+                     }) //refresh token stored in cookie
+                    console.log(accessToken)
                     res.json({ msg: "User successfully logged in" }).status(HttpCode.OK)
                 } else res.json({ msg: "Invalid infos enterd" })
             } else console.log(chalk.red("No user found"))
@@ -78,33 +84,54 @@ export const userControllers = {
             sendError(res, error)
         }
     },
-    // logoutUser: async (req: Request, res: Response) => {
-    //     try {
-    //         // destroying user token
-    //         res.cookie(user)
-    //     } catch (error) {
-    //         sendError(res, error)
-    //     }
-    // },
+    logoutUser: async (req: Request, res: Response) => {
+        try {
+         
+            const { email } = req.body
+            //confirming first by email if user exists 
+            const user = await prisma.user.findFirst({
+                where: {
+                    email
+                }
+            })
+            if (user) {
+                   // obtaiining user's token
+                const accessToken = req.headers.authorization
+                const refreshToken = req.cookies['Dreamer-cookie']
+                // verifying if token exists
+                if (!accessToken || !refreshToken)
+                    return res.status(HttpCode.UNAUTHORIZED).json({ message: "Unauthorized: No token available or expired" });
+
+                const decodedUser = await tokenOps.verifyAccessToken(refreshToken);
+                if (decodedUser) {
+                    res.clearCookie('Dreamer-cookie')
+                    console.log("user went out")
+                    return res.status(HttpCode.OK).json({ msg: "User succesffully logout" })
+                } else res.status(HttpCode.UNPROCESSABLE_ENTITY).json({ msg: "Invalid or expired token" })
+            }
+        } catch (error) {
+            sendError(res, error)
+        }
+    },
     updateUser: async (req: Request, res: Response) => {
         try {
             const { id } = req.params //obtaining a user's id
             const { name, email, password } = req.body //obtaining modified users's info
 
-            const passHash = await bcrypt.hash(password,10)
+            const passHash = await bcrypt.hash(password, 10)
 
             const updateUser = await prisma.user.update({
-                where:{
-                    userID : id
+                where: {
+                    userID: id
                 },
-                data:{
+                data: {
                     name,
                     email,
-                    password : passHash
+                    password: passHash
                 }
             })
-                if (updateUser) res.status(HttpCode.OK).json({msg:"User succesfully updated"})
-                else res.status(HttpCode.BAD_REQUEST).json({msg:"enterd correct infos"})
+            if (updateUser) res.status(HttpCode.OK).json({ msg: "User succesfully updated" })
+            else res.status(HttpCode.BAD_REQUEST).json({ msg: "enterd correct infos" })
         } catch (error) {
             sendError(res, error)
         }
