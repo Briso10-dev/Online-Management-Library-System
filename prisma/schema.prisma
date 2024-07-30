@@ -72,7 +72,7 @@ model Reservation{
   // a reseravation concerns one and only one user
   userReserveID String @db.ObjectId
   userReserve User @relation(fields: [userReserveID],references: [userID])
-  // a reseravation concerns one and only one user
+  // a reseravation concerns one and only one book
   bookReserveID String @db.ObjectId
   bookReserve Book @relation(fields: [bookReserveID],references: [bookID])
   

@@ -2,6 +2,7 @@ import { Request, Response,NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import sendError from "../core/constants/errors";
 import { HttpCode } from "../core/constants";
+import chalk from "chalk";
 
 const prisma = new PrismaClient()
 
@@ -25,8 +26,8 @@ export const middlewareBook = {
             ]);
             // Update book state to available if borrow's identifiant actually exists
             if (!borrow || !book)
-                return res.status(HttpCode.NOT_FOUND).json({ msg: "You actually did not borrow a book here" })
-            
+               return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({msg:"Book is already reserved"})
+
             next()
         } catch (error) {
             sendError(res,error)

@@ -9,6 +9,7 @@ import { ONE_HUNDRED, SIXTY } from './core/constants';
 import { userRoute } from './routes/user.routes';
 import { bookRoute } from './routes/book.routes';
 import { borrowRoute } from './routes/borrow.routes';
+import { routeReserved } from './routes/reservation.routes';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(cookieParser())
 app.use('/users',userRoute)
 app.use('/books',bookRoute)
 app.use('/loans',borrowRoute)
+app.use('/reservations',routeReserved)
 
 setupSwagger(app);
 export default app;
