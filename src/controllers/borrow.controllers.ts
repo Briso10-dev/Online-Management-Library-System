@@ -80,8 +80,6 @@ export const borrowControllers = {
             // Update book state to available if borrow's identifiant actually exists
             if (!borrow || !book)
                 return res.status(HttpCode.NOT_FOUND).json({ msg: "You actually did not borrow a book here" })
-            if (book.state == false && borrow.borrowDate > borrow.returnDate)
-                return res.status(HttpCode.FORBIDDEN).json({ msg: "You will pay extra" })
             const updateBook = await prisma.book.update({
                 where: {
                     bookID

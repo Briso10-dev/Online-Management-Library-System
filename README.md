@@ -2,7 +2,7 @@
 
 ## Overview
 
-`@Exercice1` is a TypeScript exercice project designed to simplify the development of Express.js applications. This exercice kit includes essential configurations and dependencies to help you get started quickly, while enforcing code quality and consistency standards with ESLint and Prettier.
+This Exercice is a TypeScript exercice project designed to simplify the development of Express.js applications. This exercice kit includes essential configurations and dependencies to help you get started quickly, while enforcing code quality and consistency standards with ESLint and Prettier.
 
 ## Features
 

@@ -2,33 +2,32 @@ import { Request, Response,NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import sendError from "../core/constants/errors";
 import { HttpCode } from "../core/constants";
-import chalk from "chalk";
 
 const prisma = new PrismaClient()
 
 export const middlewareBook = {
-    verifyBorrowed: async (req: Request, res: Response,next:NextFunction) => {
+    ifBorrowedBook: async (req: Request, res: Response,next:NextFunction) => {
         try {
-            const { userID } = req.params
             const { bookID } = req.body
 
-            const [borrow, book] = await Promise.all([
+            const [borrow,book] = await Promise.all([
                 prisma.borrow.findFirst({
                     where: {
-                        userBorrowID: userID
+                        borrowBookID : bookID
                     }
                 }),
-                prisma.book.findUnique({
-                    where: {
+                prisma.book.findFirst({
+                    where:{
                         bookID
                     }
                 })
-            ]);
-            // Update book state to available if borrow's identifiant actually exists
-            if (!borrow || !book)
-               return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({msg:"Book is already reserved"})
-
-            next()
+            ])
+            if(!borrow && book?.state==true){
+                next()
+            }else if(borrow && borrow.borrowDate < borrow.returnDate) //assuming that if the book is borrowed,then it exists
+                next()
+            if(borrow && book)
+                return res.status(HttpCode.FORBIDDEN).json({msg:"Book not available"})
         } catch (error) {
             sendError(res,error)
         }
