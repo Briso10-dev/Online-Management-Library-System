@@ -24,6 +24,8 @@ model User {
   borrow Borrow[]
   // A user can receive zero/many notifications
   notif Notification[]
+  // A user can do many Reservations
+  reservation Reservation[]
 }
 // Books table
 model Book{
@@ -33,10 +35,13 @@ model Book{
   description String?
   publicationYear Int
   ISBN String?
-  // A book can be borrow mzero/any times
+  state Boolean? @default(true)
+  // A book is borrowed mzero/any times
   borrow Borrow[]
-  // A book can receive zero/many notifications
+  // A book receives zero/many notifications
   notif Notification[] 
+  // A book can is reserved zero/many times
+  reservation Reservation[] 
 }
 // borrow table
 model Borrow{
@@ -60,4 +65,15 @@ model Notification{
   // A notification concerns only one book
   notifBookID String @db.ObjectId
   notifBook Book @relation(fields: [notifBookID],references: [bookID])
+}
+// model reservation
+model Reservation{
+  reservationID String  @id @default(auto()) @map("_id") @db.ObjectId
+  // a reseravation concerns one and only one user
+  userReserveID String @db.ObjectId
+  userReserve User @relation(fields: [userReserveID],references: [userID])
+  // a reseravation concerns one and only one user
+  bookReserveID String @db.ObjectId
+  bookReserve Book @relation(fields: [bookReserveID],references: [bookID])
+  
 }
