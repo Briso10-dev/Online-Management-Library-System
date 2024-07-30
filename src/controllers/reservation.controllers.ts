@@ -1,51 +1,56 @@
-import { Request,Response } from "express";
+import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { HttpCode } from "../core/constants";
 import sendError from "../core/constants/errors";
 import sendMail from "../core/config/send.mail";
+import { decision } from "../middleware/book.middleware";
 
 const prisma = new PrismaClient()
 
-export const reservesControllers ={
-    createReservation : async (req:Request,res:Response)=>{
+export const reservesControllers = {
+    createReservation: async (req: Request, res: Response) => {
         try {
-            const {userID} = req.params
-            const {bookID} = req.body
+            const { userID } = req.params
+            const { bookID } = req.body
 
             const reservations = await prisma.reservation.create({
-                data:{
-                    userReserveID :userID,
-                    bookReserveID : bookID
+                data: {
+                    userReserveID: userID,
+                    bookReserveID: bookID
                 }
             })
-            if(!reservations)
-                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({msg:"You could not reserve"})
+            if (!reservations)
+                res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: "You could not reserve" })
             return res.status(HttpCode.OK).json(reservations)
         } catch (error) {
-            sendError(res,error)
+            sendError(res, error)
         }
     },
-    sendmailBook : async (req:Request,res:Response)=>{
+    sendmailBook: async (req: Request, res: Response) => {
         try {
-            const {bookID,email} = req.body
+            const { bookID, email } = req.body
 
-            const [user,reservation] = await Promise.all([
+            const [user, reservation] = await Promise.all([
                 prisma.user.findUnique({
-                    where :{
+                    where: {
                         email
                     }
                 }),
                 prisma.reservation.findFirst({
-                    where : {
+                    where: {
                         bookReserveID: bookID
                     }
                 })
             ])
-            if(!reservation || !user)
-                return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({msg:"You did not reserved a book or wrong email entered"})
-            sendMail(email, "This is an anonymous connection!","Oh yess, the book is now available")
+            if (!reservation || !user)
+                return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: "You did not reserved a book or wrong email entered" })
+            if (decision)
+                sendMail(email, "This is an anonymous connection!", "Oh yess, the book is now available")
+            else
+                return
+
         } catch (error) {
-            sendError(res,error)
+            sendError(res, error)
         }
     }
 }

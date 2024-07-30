@@ -13,15 +13,13 @@ export const notifBorrowed = async (req: Request, res: Response) => {
                 userBrorrow: {
                     select: {
                         userID: true,
-                        // Add other user fields you need for notifications
                         email: true,
                         name: true,
                     }
                 },
                 borrowBook: {
                     select: {
-                        title: true,
-                        // Add other book fields you might need
+                        title: true
                     }
                 },
                 returnDate: true,
