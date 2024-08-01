@@ -43,12 +43,10 @@ export const notifBorrowed = async (req: Request, res: Response) => {
         await prisma.notification.createMany({
             data: notifications
         });
-    
-        // Sending emails to users
-        for (const borrow of userBorrowed
 
-        ) {
-             sendMail(borrow.userBrorrow.email,"Book Availability Notification",await EmailTemplate.Reminder(12,"","",""));
+        // Sending emails to users
+        for (const borrow of userBorrowed){
+            sendMail(borrow.userBrorrow.email, "Book Availability Notification", await EmailTemplate.Reminder(borrow.userBrorrow.name,borrow.borrowBook.title,borrow.returnDate.toDateString()));
         }
 
         return res.status(HttpCode.OK).json({ msg: "Notifications sent and stored successfully" });

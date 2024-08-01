@@ -3,6 +3,7 @@ import prisma from "../core/config/prisma";
 import { HttpCode } from "../core/constants";
 import sendError from "../core/constants/errors";
 import sendMail from "../core/config/send.mail";
+import EmailTemplate from "../core/template";
 import { decision } from "../middleware/book.middleware";
 
 export const reservesControllers = {
@@ -35,6 +36,13 @@ export const reservesControllers = {
                     }
                 }),
                 prisma.reservation.findFirst({
+                    select:{
+                        bookReserve:{
+                            select:{
+                                bookID : true
+                            },
+                        },
+                    },
                     where: {
                         bookReserveID: bookID
                     }
@@ -45,7 +53,7 @@ export const reservesControllers = {
             const message = "Book availability"
             if (decision) {
                 //sending mail to confirm user book availability
-                sendMail(email, "This is an anonymous connection!", "Oh yess, the book is now available")
+                sendMail(email, "This is an anonymous connection!",await EmailTemplate.BookAvailable(user.name,reservation.bookReserve.bookID))
                 // updating notification table
                 await prisma.notification.create({
                     data: {
