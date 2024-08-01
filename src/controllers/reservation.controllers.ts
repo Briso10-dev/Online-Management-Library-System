@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../core/config/prisma";
 import { HttpCode } from "../core/constants";
 import sendError from "../core/constants/errors";
 import sendMail from "../core/config/send.mail";
 import { decision } from "../middleware/book.middleware";
-
-const prisma = new PrismaClient()
 
 export const reservesControllers = {
     createReservation: async (req: Request, res: Response) => {

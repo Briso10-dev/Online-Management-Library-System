@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { HttpCode } from "../core/constants";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../core/config/prisma";
 import sendError from "../core/constants/errors";
 import { validationResult } from "express-validator";
-
-const prisma = new PrismaClient() //orm creation
 
 export const borrowControllers = {
     createBorrow: async (req: Request, res: Response) => {

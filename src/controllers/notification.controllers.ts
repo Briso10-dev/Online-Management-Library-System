@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../core/config/prisma";
 import { HttpCode } from "../core/constants";
 import sendError from "../core/constants/errors";
 import sendMail from "../core/config/send.mail";
-
-const prisma = new PrismaClient()
 
 export const notifBorrowed = async (req: Request, res: Response) => {
     try {
@@ -46,7 +44,9 @@ export const notifBorrowed = async (req: Request, res: Response) => {
         });
     
         // Sending emails to users
-        for (const borrow of userBorrowed) {
+        for (const borrow of userBorrowed
+
+        ) {
              sendMail(
                 borrow.userBrorrow.email,
                 "Book Availability Notification",

@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 import { HttpCode } from "../core/constants";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../core/config/prisma";
 import chalk from 'chalk'
 import sendError from "../core/constants/errors";
 import bcrypt from 'bcrypt'
 import { validationResult } from "express-validator";
-import tokenOps from "../core/config/jwt.functions";
-
-const prisma = new PrismaClient() //orm creation
+import tokenOps from "../core/constants/jwt.functions";
 
 export const userControllers = {
     // get user profile
