@@ -35,9 +35,23 @@ export const notifBorrowed = async (req: Request, res: Response) => {
             email: borrow.userBrorrow.email
         })));
         // Extraction of needed notification infos 
-       
+        const message = "book availability"
+        const userNotifID = JSON.stringify(userBorrowed.map(borrow => ({
+            userNotifID: borrow.userBrorrow.userID,
+        })));
+        console.log({userNotifID})
+        const notifBookID = JSON.stringify(userBorrowed.map(borrow => ({
+            bookID : borrow.borrowBook.bookID
+        })));
         sendMail(email,"This is an anonymous connection",`Oh yess,the book will soon be available`)
-       
+        // updating notification table
+        await prisma.notification.create({
+            data:{
+                message,
+                userNotifID,
+                notifBookID
+            }
+        })
         return res.status(HttpCode.OK).json({msg:"check your email box"});  
     } catch (error) {
         sendError(res, error);
