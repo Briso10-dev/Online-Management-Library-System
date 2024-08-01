@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { envs } from './env';
+import { envs } from '../config/env';
 //import sendError from '../constants/errors';
 
 //definition of interface to be used as payload

@@ -6,18 +6,18 @@ const sendMail = (email: string,subject: string, text: string) => {
     // configuring nodemailer
 
     const transporter = nodemailer.createTransport({
-        service: "Gmail",
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
+        service: envs.SERVICE,
+        host: process.env.MAIL_HOST,
+        port: Number(envs.MAIL_PORT),
+        secure: Boolean(envs.MAIL_SECURE),
         auth: {
-            user: envs.GMAIL_EMAIL,
-            pass: envs.GMAIL_PASSWORD,
+            user: envs.MAIL_USER,
+            pass: process.env.MAIL_PASS,
         },
     });
     // composing the mail
     const mailOptions = {
-        from: envs.GMAIL_EMAIL,
+        from:  envs.MAIL_FROM,
         to: email,
         subject: subject,
         text: text,

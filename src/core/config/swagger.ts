@@ -1,9 +1,8 @@
 // Fichier de configuration pour la doc
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-
 import { Express } from 'express';
-import { envs } from './core/config/env';
+import { envs } from './env';
 
 const swaggerDefinition = {
 	openapi: '3.0.0',
@@ -16,8 +15,44 @@ const swaggerDefinition = {
 		{
 			url: `http://localhost:${envs.PORT}` // Change this to the URL of your API
 		}
-	]
-};
+	],
+	components: {
+		schemas: {
+			User: {
+				type: "object",
+				properties: {
+					userID: {
+						type: "string"
+					},
+					email: {
+						type: "string"
+					},
+					name: {
+						type: "string"
+					},
+					password: {
+						type: "string"
+					},
+				}
+			},
+			Error: {
+				type: "object",
+				properties: {
+					message: {
+						type: "string"
+					}
+				}
+			}
+		},
+		securitySchemes: {
+			bearerAuth: {
+				type: "http",
+				scheme: "bearer",
+				bearerFormat: "JWT"
+			}
+		}
+	}
+}
 
 const options = {
 	swaggerDefinition,
