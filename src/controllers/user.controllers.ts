@@ -33,7 +33,7 @@ export const userControllers = {
         const errors = validationResult(req);
         if (!errors.isEmpty())
             return res.status(HttpCode.UNPROCESSABLE_ENTITY).json({ errors: errors.array() });
-
+        
         try {
             const { name, email, password } = req.body
 
@@ -97,14 +97,14 @@ export const userControllers = {
             if (user) {
                    // obtaiining user's token
                 const accessToken = req.headers.authorization
-                const refreshToken = req.cookies['Dreamer-cookie']
+                const refreshToken = req.cookies[`${user.name}-cookie`]
                 // verifying if token exists
                 if (!accessToken || !refreshToken)
                     return res.status(HttpCode.UNAUTHORIZED).json({ message: "Unauthorized: No token available or expired" });
 
-                const decodedUser = await tokenOps.verifyAccessToken(refreshToken);
+                const decodedUser = await tokenOps.verifyAccessToken(accessToken);
                 if (decodedUser) {
-                    res.clearCookie('Dreamer-cookie')
+                    res.clearCookie('${user.name}-cookie`')
                     console.log("user went out")
                     return res.status(HttpCode.OK).json({ msg: "User succesffully logout" })
                 } else res.status(HttpCode.UNPROCESSABLE_ENTITY).json({ msg: "Invalid or expired token" })

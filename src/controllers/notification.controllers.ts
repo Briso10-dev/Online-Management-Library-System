@@ -19,6 +19,7 @@ export const notifBorrowed = async (req: Request, res: Response) => {
                 },
                 borrowBook: {
                     select: {
+                        bookID:true,
                         title: true
                     }
                 },
@@ -29,11 +30,14 @@ export const notifBorrowed = async (req: Request, res: Response) => {
         if (userBorrowed.length === 0) {
             return res.status(HttpCode.NOT_FOUND).json({ msg: "No borrowed books found" });
         }
-        // Extract relevant information
+        // Extract email for sending mail
         const email = JSON.stringify(userBorrowed.map(borrow => ({
             email: borrow.userBrorrow.email
         })));
+        // Extraction of needed notification infos 
+       
         sendMail(email,"This is an anonymous connection",`Oh yess,the book will soon be available`)
+       
         return res.status(HttpCode.OK).json({msg:"check your email box"});  
     } catch (error) {
         sendError(res, error);

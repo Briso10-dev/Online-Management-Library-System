@@ -44,9 +44,20 @@ export const reservesControllers = {
             ])
             if (!reservation || !user)
                 return res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ msg: "You did not reserved a book or wrong email entered" })
-            if (decision)
+            const message = "Book availability"
+            if (decision) {
+                //sending mail to confirm user book availability
                 sendMail(email, "This is an anonymous connection!", "Oh yess, the book is now available")
-            else
+                // updating notification table
+                await prisma.notification.create({
+                    data: {
+                        message,
+                        userNotifID: user.userID,
+                        notifBookID: bookID
+                    }
+                })
+                return res.status(HttpCode.OK).json({ msg: "check your email box" });
+            }else
                 return
 
         } catch (error) {

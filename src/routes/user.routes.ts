@@ -15,5 +15,5 @@ userRoute.post("/login",userControllers.loginUser)
 userRoute.post("/logout",userControllers.logoutUser)
 // update user profile
 userRoute.put("/profile/:id",userValidator,userControllers.updateUser)
-// delete an acount user
+// delete acount user
 userRoute.delete("/profile/:id",userControllers.deleteUser)
