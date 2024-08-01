@@ -19,7 +19,7 @@ export const notifBorrowed = async (req: Request, res: Response) => {
                 },
                 borrowBook: {
                     select: {
-                        bookID:true,
+                        bookID: true,
                         title: true
                     }
                 },
@@ -30,29 +30,31 @@ export const notifBorrowed = async (req: Request, res: Response) => {
         if (userBorrowed.length === 0) {
             return res.status(HttpCode.NOT_FOUND).json({ msg: "No borrowed books found" });
         }
-        // Extract email for sending mail
-        const email = JSON.stringify(userBorrowed.map(borrow => ({
-            email: borrow.userBrorrow.email
-        })));
-        // Extraction of needed notification infos 
-        const message = "book availability"
-        const userNotifID = JSON.stringify(userBorrowed.map(borrow => ({
+
+        const message = "Book availability notification";
+
+        // Creating notifications for each borrowed book
+        const notifications = userBorrowed.map(borrow => ({
+            message,
             userNotifID: borrow.userBrorrow.userID,
-        })));
-        console.log({userNotifID})
-        const notifBookID = JSON.stringify(userBorrowed.map(borrow => ({
-            bookID : borrow.borrowBook.bookID
-        })));
-        sendMail(email,"This is an anonymous connection",`Oh yess,the book will soon be available`)
-        // updating notification table
-        await prisma.notification.create({
-            data:{
-                message,
-                userNotifID,
-                notifBookID
-            }
-        })
-        return res.status(HttpCode.OK).json({msg:"check your email box"});  
+            notifBookID: borrow.borrowBook.bookID
+        }));
+
+        // Creating notification for each user
+        await prisma.notification.createMany({
+            data: notifications
+        });
+    
+        // Sending emails to users
+        for (const borrow of userBorrowed) {
+             sendMail(
+                borrow.userBrorrow.email,
+                "Book Availability Notification",
+                `Dear ${borrow.userBrorrow.name}, the book "${borrow.borrowBook.title}" will soon be available. Return date: ${borrow.returnDate.toDateString()}`
+            );
+        }
+
+        return res.status(HttpCode.OK).json({ msg: "Notifications sent and stored successfully" });
     } catch (error) {
         sendError(res, error);
     }
