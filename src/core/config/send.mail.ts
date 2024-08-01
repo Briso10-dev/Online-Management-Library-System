@@ -2,7 +2,7 @@ import { envs } from "./env";
 import nodemailer from 'nodemailer'
 
 
-const sendMail = (email: string,subject: string, text: string) => {
+const sendMail = (email: string,subject: string, html: string) => {
     // configuring nodemailer
 
     const transporter = nodemailer.createTransport({
@@ -19,8 +19,8 @@ const sendMail = (email: string,subject: string, text: string) => {
     const mailOptions = {
         from:  envs.MAIL_FROM,
         to: email,
-        subject: subject,
-        text: text,
+        subject,
+        html
     };
     // sending the mail
     transporter.sendMail(mailOptions, (error, info) => {

@@ -3,6 +3,7 @@ import prisma from "../core/config/prisma";
 import { HttpCode } from "../core/constants";
 import sendError from "../core/constants/errors";
 import sendMail from "../core/config/send.mail";
+import EmailTemplate from "../core/template";
 
 export const notifBorrowed = async (req: Request, res: Response) => {
     try {
@@ -47,11 +48,7 @@ export const notifBorrowed = async (req: Request, res: Response) => {
         for (const borrow of userBorrowed
 
         ) {
-             sendMail(
-                borrow.userBrorrow.email,
-                "Book Availability Notification",
-                `Dear ${borrow.userBrorrow.name}, the book "${borrow.borrowBook.title}" will soon be available. Return date: ${borrow.returnDate.toDateString()}`
-            );
+             sendMail(borrow.userBrorrow.email,"Book Availability Notification",await EmailTemplate.Reminder(12,"","",""));
         }
 
         return res.status(HttpCode.OK).json({ msg: "Notifications sent and stored successfully" });
