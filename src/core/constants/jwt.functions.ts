@@ -9,6 +9,7 @@ const openFile = (file: string) => {
 const Token = {
   generateAccessToken: (user: any) => {
     return jwt.sign(user, openFile(envs.JWT_ACCESS_TOKEN_PRIV), {
+      algorithm: "RS256",
       expiresIn: "5m"
     });
   },

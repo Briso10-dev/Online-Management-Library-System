@@ -4,11 +4,7 @@ import ejs from "ejs";
 import path from "path";
 
 const EmailTemplate = {
-  Reminder: async (
-    userName: string,
-    bookTitle: string,
-    returnDate: string
-  ) => {
+  Reminder: async (userName: string,bookTitle: string,returnDate: string) => {
     try {
       const html = await ejs.renderFile(path.join(__dirname, "reminder.ejs"), {
         userName,
@@ -21,10 +17,7 @@ const EmailTemplate = {
       return "";
     }
   },
-  BookAvailable: async (
-    userName: string,
-    bookTitle: string
-  ) => {
+  BookAvailable: async (userName: string,bookTitle: string) => {
     try {
       const html = await ejs.renderFile(path.join(__dirname, "bookAvailable.ejs"), {
         userName,
