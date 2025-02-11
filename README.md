@@ -53,8 +53,8 @@ This Exercice is a TypeScript exercice project designed to simplify the developm
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/worketyamo/ts-starter.git
-cd ts-starter
+git clone https://github.com/Briso10-dev/Online-Management-Library-System
+cd Online-Management-Library-System
 yarn install
 ```
 
@@ -89,7 +89,6 @@ yarn start
 - **start** : Runs the compiled JavaScript code from the dist folder
 
 ## Utilization
-
 
 Starting the Server
 To start the server, run the following command:
@@ -130,5 +129,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ### 🌟 Show Your Support!
 
 If you found this project helpful, please give it a ⭐ on GitHub! It helps others discover it too.
+
 
 Happy coding! 💻✨
