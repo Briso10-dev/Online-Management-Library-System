@@ -16,7 +16,7 @@ This Exercice is a TypeScript exercice project designed to simplify the developm
 
 ---
 
-## Features
+## ✨ Features
 - TypeScript for static typing and advanced code intelligence
 - Express.js for creating robust APIs and web applications
 - ESLint and Prettier for code quality and formatting
@@ -26,7 +26,7 @@ This Exercice is a TypeScript exercice project designed to simplify the developm
 - Swagger integration for API documentation
 ---
 
-## Prerequisites
+## 🔍 Prerequisites
 
 - Node.js >= 20.12.0
 - Yarn >= 1.22.19
@@ -37,16 +37,18 @@ This Exercice is a TypeScript exercice project designed to simplify the developm
 
 ## 📦 Technologies Used
 
-| Technology      | Description                          |
-|------------------|--------------------------------------|
-| **Node.js**     | JavaScript runtime for server-side   |
-| **Express.js**  | Web framework for building APIs      |
-| **MongoDB**     | NoSQL database for data storage      |
-| **Mongoose**    | ODM library for MongoDB integration  |
+| Technology      | Description                                      |
+|----------------|--------------------------------------------------|
+| **TypeScript** | Strongly typed JavaScript for scalable code      |
+| **Node.js**    | JavaScript runtime for server-side development   |
+| **Express.js** | Minimalist web framework for building APIs       |
+| **MongoDB**    | NoSQL database for flexible and scalable storage |
+| **Prisma**     | Modern database ODM for efficient data access    |
+| **Docker**     | Containerization for easy deployment & scalability |
 
 ---
 
-## Getting Started
+## ⚙️ Getting Started
 
 ### Installation
 
@@ -108,7 +110,7 @@ http://localhost:3000/api-docs
 
 ## 🤝 Contributing
 
-We ❤️ contributions! If you'd like to contribute to this project, follow these steps:
+We love contributions! If you'd like to contribute to this project, follow these steps:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-name`).
