@@ -1,4 +1,4 @@
-# Online Management Library System
+# An API REST of an Online Management Library System
 
 ---
 ## Overview
